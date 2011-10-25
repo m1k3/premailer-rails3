@@ -23,9 +23,14 @@ module PremailerRails
           body premailer.to_plain_text
         end unless message.text_part
 
-        message.html_part do
-          content_type "text/html; charset=#{charset}"
-          body premailer.to_inline_css
+        if message.html_part
+          message.html_part.content_type "text/html; charset=#{charset}"
+          message.html_part.body premailer.to_inline_css
+        else
+          message.html_part do
+            content_type "text/html; charset=#{charset}"
+            body premailer.to_inline_css
+          end
         end
       end
     end
